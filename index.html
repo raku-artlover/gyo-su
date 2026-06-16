@@ -1,698 +1,676 @@
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>ART MARKET</title>
-
+<title>WORKS - Raku Watanabe</title>
 
 <style>
 
-
-body{
-
-margin:0;
-
-font-family:Arial,sans-serif;
-
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: "Helvetica", sans-serif;
+  background: #fff;
+  color: #000;
+  overflow-x: hidden;
 }
 
-
-/* ヘッダー */
-
-header{
-
-height:80px;
-
-display:flex;
-
-align-items:center;
-
-justify-content:center;
-
-border-bottom:1px solid #ddd;
-
-position:relative;
-
+/* ────────────────
+  固定ヘッダー白背景（ロゴ＋Sort の後ろ）
+──────────────── */
+.header-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 65px;              /* ロゴ位置に合わせた高さ */
+  background: #fff;
+  z-index: 900;              /* 画像より前に必ず来る */
+  pointer-events: none;      /* この帯はクリック無効 */
 }
 
-
-
-.logo{
-
-font-size:25px;
-
-font-weight:bold;
-
-text-decoration:none;
-
-color:black;
-
+/* ロゴ ＆ Sort は pointer-events 復活 */
+.logo, .sort-menu-button {
+  pointer-events: auto;
 }
 
-
-
-#menuBtn{
-
-position:absolute;
-
-left:20px;
-
-font-size:28px;
-
-background:none;
-
-border:0;
-
-cursor:pointer;
-
+/* ロゴ */
+.logo {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  font-size: 30px;
+  font-weight: bold;
+  z-index: 950;
+  color: #000;
+  text-decoration: none;
 }
 
-
-
-.header-right{
-
-position:absolute;
-
-right:20px;
-
-display:flex;
-
-gap:15px;
-
+/* Sort ボタン */
+.sort-menu-button {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #000;
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 15px;
+  cursor: pointer;
+  z-index: 950;
+  user-select: none;
 }
 
-
-
-.header-right button{
-
-font-size:22px;
-
-background:none;
-
-border:0;
-
-cursor:pointer;
-
+/* Sort メニュー */
+.sort-menu {
+  position: fixed;
+  top: 65px;
+  right: 20px;
+  background: #fff;
+  border: 1px solid #000;
+  border-radius: 8px;
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 960;
 }
 
-
-
-
-
-/* サイドバー */
-
-#sidebar{
-
-position:fixed;
-
-top:0;
-
-left:-300px;
-
-width:230px;
-
-height:100%;
-
-background:white;
-
-box-shadow:0 0 15px #aaa;
-
-padding:40px;
-
-transition:.3s;
-
-z-index:10;
-
+.sort-menu div {
+  padding: 10px 14px;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  border-bottom: 1px solid #ddd;
+}
+.sort-menu div:last-child { border-bottom: none; }
+.sort-menu div:hover {
+  background: #000;
+  color: #fff;
 }
 
+/* WORK ITEM（丸） */
 
-
-/* ☰またはサイドバーにカーソル */
-
-#menuBtn:hover + #sidebar,
-#sidebar:hover{
-
-left:0;
-
+.work-item {
+  position: absolute;
+  cursor: pointer;
+  overflow: hidden;
+  border-radius: 50%;
+  transition:
+    left 0.6s ease,
+    top 0.6s ease,
+    width 0.4s ease,
+    height 0.4s ease,
+    transform 0.4s ease;
+  z-index: 100;
 }
 
-
-
-
-#sidebar a{
-
-display:block;
-
-margin:30px 0;
-
-text-decoration:none;
-
-color:black;
-
+.work-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: filter 0.3s ease, transform 0.4s ease;
 }
 
-
-
-
-
-/* ログイン */
-
-.login-area{
-
-position:relative;
-
+.work-item:hover img {
+  filter: brightness(0.4);
+  transform: scale(1.1);
+}
+.work-item.is-active img {
+  filter: brightness(0.4);
+  transform: scale(1.1);
 }
 
-
-
-#login{
-
-
-display:none;
-
-position:absolute;
-
-right:0;
-
-top:40px;
-
-background:white;
-
-border:1px solid #ddd;
-
-padding:30px;
-
-width:220px;
-
-z-index:20;
-
+.work-item.is-active .work-title {
+  opacity: 1;
 }
 
-
-
-.login-area:hover #login{
-
-display:block;
-
+/* 作品名 */
+.work-title {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 90%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: #fff;
+  font-weight: bold;
+  text-shadow: 0 4px 10px rgba(0,0,0,0.8);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+  line-height: 1.25em;
 }
 
-
-
-
-
-/* 商品 */
-
-.products{
-
-
-display:grid;
-
-grid-template-columns:
-
-repeat(4,1fr);
-
-gap:30px;
-
-padding:40px;
-
-
+.work-title span,
+.work-title dt {
+  display: block;
 }
 
-
-
-.item{
-
-cursor:pointer;
-
+.work-item:hover .work-title {
+  opacity: 1;
 }
 
-
-
-.item img{
-
-width:100%;
-
+/* Wrapper（画像は白帯の80px下から開始） */
+#pageWrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 100px; /* ← 白帯分＋余白 */
 }
-
-
-
-.item p{
-
-margin:5px;
-
-}
-
-
-
-small{
-
-color:#555;
-
-}
-
-
-
-
-
-/* 商品詳細 */
-
-#detail{
-
-display:none;
-
-padding:40px;
-
-display:flex;
-
-gap:50px;
-
-align-items:flex-start;
-
-}
-
-
-
-#detail img{
-
-width:400px;
-
-}
-
-
-
-.detail-text{
-
-max-width:400px;
-
-}
-
-
-
-
-button{
-
-padding:10px 20px;
-
-margin:5px;
-
-}
-
-
-
-
 </style>
-
 </head>
-
-
-
 <body>
 
+<!-- 白背景帯（固定） -->
+<div class="header-bar"></div>
 
+<!-- 文字はこの帯の上に重ねる -->
+<a href="index.html" class="logo">Raku Watanabe</a>
+<div class="sort-menu-button">Sort</div>
 
-
-<header>
-
-
-<button id="menuBtn">
-
-☰
-
-</button>
-
-
-
-
-<a href="index.html" class="logo">
-
-ART MARKET
-
-</a>
-
-
-
-
-<div class="header-right">
-
-
-<div class="login-area">
-
-
-<button>
-
-♙
-
-</button>
-
-
-<div id="login">
-
-
-<h3>
-ログイン
-</h3>
-
-
-<input placeholder="メール">
-
-
-<br>
-
-
-<input placeholder="パスワード">
-
-
-<br>
-
-
-<button>
-
-ログイン
-
-</button>
-
-
-
-<hr>
-
-
-
-<h3>
-
-新規登録
-
-</h3>
-
-
-<button>
-
-登録
-
-</button>
-
-
-
-</div>
-
-
+<div class="sort-menu">
+  <div data-sort="asc">古い順</div>
+  <div data-sort="desc">新しい順</div>
+  <div data-sort="random">ランダム</div>
 </div>
 
 
 
+<div id="pageWrapper">
 
-<button>
+  <!-- ここから作品リスト（あなたのまま） -->
+  <a class="work-item" href="works/work1.html" data-year="2023.3">
+    <img src="img1.jpg">
+    <div class="work-title">
+      <span class="jp">いきものとして</span>
+      <dt>As a Living Being</dt>
+       <dt>As a Living Being</dt>
+    </div>
+  </a>
 
-🛒
+  <a class="work-item" href="works/work2.html" data-year="2024.5">
+    <img src="img2.jpg">
+    <div class="work-title">
+      <span class="jp">街をやわらかくする</span>
+      <dt>Softing the City</dt>
+    </div>
+  </a>
 
-</button>
+  <a class="work-item" href="works/work3.html" data-year="2025.2">
+    <img src="img3.jpg">
+    <div class="work-title">
+      <span class="jp">ゆらめく応え</span>
+      <dt>Wavering Reaction</dt>
+    </div>
+  </a>
 
+  <a class="work-item" href="works/work4.html" data-year="2023.5">
+    <img src="img4.jpg">
+    <div class="work-title">
+      <span class="jp">殻字プロジェクト</span>
+      <dt>Hollow-Glyph Project</dt>
+    </div>
+  </a>
+
+  <a class="work-item" href="works/work5.html" data-year="2023.6">
+    <img src="img5.jpg">
+    <div class="work-title">
+      <span class="jp">行為の彫刻</span>
+      <dt>Sculoting the Act</dt>
+    </div>
+  </a>
+
+  <a class="work-item" href="works/work6.html" data-year="2019">
+    <img src="img6.jpg">
+    <div class="work-title">
+      <span class="jp">parallel world</span>
+    </div>
+  </a>
+
+  <a class="work-item" href="works/work7.html" data-year="2025.3">
+    <img src="img7.jpg">
+    <div class="work-title">
+      <span class="jp">演じる会話</span>
+      <dt>Performed Dialogue</dt>
+    </div>
+  </a>
+
+  <a class="work-item" href="works/work8.html" data-year="2025.1">
+    <img src="img8.jpg">
+    <div class="work-title">
+      <span class="jp">数千万年を装う</span>
+      <dt>Pretending Tens of Millions of Years</dt>
+    </div>
+  </a>
+
+  <a class="work-item" href="works/work9.html" data-year="2024.8">
+    <img src="img9.jpg">
+    <div class="work-title small-title">
+      <span class="jp">作為的シンクロニシティ</span>
+      <dt>Contrived Synchronicity</dt>
+    </div>
+  </a>
+
+  <a class="work-item" href="works/work10.html" data-year="2024.7">
+    <img src="img10.jpg">
+    <div class="work-title">
+      <span class="jp">人生の擬似体験</span>
+      <dt>Simulated Life Experience</dt>
+    </div>
+  </a>
+
+  <a class="work-item" href="works/work11.html" data-year="2023.2">
+    <img src="img11.jpg">
+    <div class="work-title">
+      <span class="jp">依存の客観視</span>
+      <dt>Objectifying Dependence</dt>
+    </div>
+  </a>
+
+  <a class="work-item" href="works/work12.html" data-year="2023.1">
+    <img src="img12.jpg">
+    <div class="work-title">
+      <span class="jp">LET OUT!</span>
+    </div>
+  </a>
+
+  <a class="work-item" href="works/work13.html" data-year="2023.9">
+    <img src="img13.jpg">
+    <div class="work-title">
+      <span class="jp">ゆめ、うつつ、廻る。</span>
+      <dt>Dream, Reality, Turning.</dt>
+    </div>
+  </a>
+  <a class="work-item" href="works/work14.html" data-year="2024.1">
+    <img src="img14.jpg">
+    <div class="work-title">
+      <span class="jp">ポッキー（貫通）</span>
+      <dt>Pocky(penetration)</dt>
+    </div>
+  </a>
+   <a class="work-item" href="works/work15.html" data-year="2022.2">
+    <img src="img15.jpg">
+    <div class="work-title">
+      <span class="jp">再創世</span>
+      <dt>Re-Genesis</dt>
+    </div>
+  </a>
+   <a class="work-item" href="works/work16.html" data-year="2023.7">
+    <img src="img16.jpg">
+    <div class="work-title">
+      <span class="jp">自分を他人に話す</span>
+      <dt>To talk abouut oneself to Others</dt>
+    </div>
+  </a>
+   <a class="work-item" href="works/work17.html" data-year="2024.2">
+    <img src="img17.jpg">
+    <div class="work-title">
+      <span class="jp">「必然」の片鱗を</span>
+      <dt>A Glimpse of the "Inevitable"</dt>
+    </div>
+  </a>
+   <a class="work-item" href="works/work18.html" data-year="2022.1">
+    <img src="img18.jpg">
+    <div class="work-title">
+      <span class="jp">自画像</span>
+      <dt>Self-Portrait</dt>
+    </div>
+  </a>
+   <a class="work-item" href="works/work19.html" data-year="2024.3">
+    <img src="img19.jpg">
+    <div class="work-title">
+      <span class="jp">Mr.</span>
+      <dt></dt>
+    </div>
+  </a>
+  <a class="work-item" href="works/work20.html" data-year="2024.9">
+    <img src="img20.jpg">
+    <div class="work-title">
+      <span class="jp">私を整理して、次へ</span>
+      <dt>Klesha Drawing</dt>
+    </div>
+  </a>
+  <a class="work-item" href="works/work21.html" data-year="2021.1">
+    <img src="img21.jpg">
+    <div class="work-title">
+      <span class="jp">Singularity</span>
+      <dt></dt>
+    </div>
+  </a>
+  <a class="work-item" href="works/work22.html" data-year="2023.1">
+    <img src="img22.jpg">
+    <div class="work-title">
+      <span class="jp">巨大板チョコ</span>
+      <dt>Giant Chocolate</dt>
+    </div>
+  </a>
+  <a class="work-item" href="works/work23.html" data-year="2024.7">
+    <img src="img23.jpg">
+    <div class="work-title">
+      <span class="jp">気配コミュニティ</span>
+      <dt>Whisper Community</dt>
+    </div>
+  </a>
+  <a class="work-item" href="works/work24.html" data-year="2021.0">
+    <img src="img24.jpg">
+    <div class="work-title">
+      <span class="jp">天下御麺</span>
+      <dt>Noodles</dt>
+    </div>
+  </a>
+  <a class="work-item" href="works/work25.html" data-year="2023.4">
+    <img src="img25.jpg">
+    <div class="work-title">
+      <span class="jp">無題（キャベツ頭）</span>
+      <dt>Untitled(Cabbage Head)</dt>
+    </div>
+  </a>
+  <a class="work-item" href="works/work26.html" data-year="2023.4">
+    <img src="img26.jpg">
+    <div class="work-title">
+      <span class="jp">世界と接する</span>
+      <dt>Point of Contact with the World</dt>
+    </div>
+  </a>
+  <a class="work-item" href="works/work27.html" data-year="2025.5">
+    <img src="img27.jpg">
+    <div class="work-title">
+      <span class="jp">競技カルタ選手権大会</span>
+      <dt>Competitive Karuta Championship Tournament</dt>
+    </div>
+  </a>
+  <a class="work-item" href="works/work28.html" data-year="2025.4">
+    <img src="img28.jpg">
+    <div class="work-title">
+      <span class="jp">英語の練習</span>
+      <dt>English Practice</dt>
+    </div>
+  </a>
+  <a class="work-item" href="works/work29.html" data-year="2024.6">
+    <img src="img29.jpg">
+    <div class="work-title">
+      <span class="jp">アンパンマンパンマン</span>
+      <dt>Anpanmanpanman</dt>
+    </div>
+  </a>
+  <a class="work-item" href="works/work30.html" data-year="2024.4">
+    <img src="img30.jpg">
+    <div class="work-title">
+      <span class="jp">ピカソ</span>
+      <dt>Picasso</dt>
+    </div>
+  </a>
+    <a class="work-item" href="works/work31.html" data-year="2025.7">
+    <img src="img31.jpg">
+    <div class="work-title">
+      <span class="jp">願う、抗う、乗り越える。</span>
+      <dt>To Hope, to Stand, to Overcome.</dt>
+    </div>
+  </a> 
+  <a class="work-item" href="works/work32.html" data-year="2025.0">
+    <img src="img32.jpg">
+    <div class="work-title">
+      <span class="jp">なぞるブジェ</span>
+      <dt>Tracebject</dt>
+    </div>
+  </a>
+<a class="work-item" href="works/work32.html" data-year="2026.0">
+    <img src="img33.jpg">
+    <div class="work-title">
+      <span class="jp">たべもののかたち</span>
+      <dt>Food Shapes</dt>
+    </div>
+  </a>
+  <a class="work-item" href="works/work32.html" data-year="2025.6">
+    <img src="img34.jpg">
+    <div class="work-title">
+      <span class="jp">字日記</span>
+      <dt>Gliph-Diary</dt>
+    </div>
+  </a>
+   <a class="work-item" href="works/work32.html" data-year="2026.1">
+    <img src="img35.jpg">
+    <div class="work-title">
+      <span class="jp">サークル活動</span>
+      <dt>Club Activities</dt>
+    </div>
+  </a>
+   <a class="work-item" href="works/work32.html" data-year="2026.2">
+    <img src="img36.jpg">
+    <div class="work-title">
+      <span class="jp">【漫才】『純水サイダー「給食」の発表と講評』</span>
+      <dt>[Manzai]"Presentation and Feedback on"School Lunch"Junsui-Cider"</dt>
+    </div>
+  </a>
 
 </div>
-
-
-
-</header>
-
-
-
-
-
-
-<nav id="sidebar">
-
-
-<button>
-
-×
-
-</button>
-
-
-<a href="index.html">
-HOME
-</a>
-
-
-<a>
-ITEM
-</a>
-
-
-<a>
-ARTIST
-</a>
-
-
-<a>
-NEWS
-</a>
-
-
-<a>
-FAQ
-</a>
-
-
-<a>
-CONTACT
-</a>
-
-
-</nav>
-
-
-
-
-
-
-
-<main id="home">
-
-
-<div class="products">
-
-
-
-<div class="item"
-onclick="showProduct(0)">
-
-
-<img src="img2.jpg">
-
-
-<p>
-巨大な一円玉
-</p>
-
-
-<small>
-渡邉楽
-</small>
-
-
-<p>
-¥100,000
-</p>
-
-
-</div>
-
-
-
-
-
-<div class="item"
-onclick="showProduct(1)">
-
-
-<img src="img19.jpg">
-
-
-<p>
-Mr.
-</p>
-
-
-<small>
-渡邉楽
-</small>
-
-
-<p>
-¥50,000
-</p>
-
-
-</div>
-
-
-
-</div>
-
-
-</main>
-
-
-
-
-
-
-<section id="detail">
-
-
-<img id="detailImage">
-
-
-
-<div class="detail-text">
-
-
-<h1 id="name"></h1>
-
-
-<h3 id="artist"></h3>
-
-
-<p id="description"></p>
-
-
-<h2 id="price"></h2>
-
-
-
-<button>
-🛒 カートに入れる
-</button>
-
-
-<button>
-♡ お気に入り
-</button>
-
-
-<button>
-問い合わせ
-</button>
-
-
-
-<h2>
-
-その他のアイテム
-
-</h2>
-
-
-</div>
-
-
-</section>
-
-
-
-
-
-
 
 
 <script>
+const wrapper = document.getElementById("pageWrapper");
+const items = Array.from(document.querySelectorAll(".work-item"));
+
+let currentSorted = items;
+
+/* タイトルサイズ */
+function applyTitleSize(size) {
+  let fontJP = 22;
+  let fontEN = 16;
+
+  if (size >= 260) { fontJP = 22; fontEN = 16; }
+  else if (size >= 230) { fontJP = 20; fontEN = 15; }
+  else if (size >= 200) { fontJP = 18; fontEN = 14; }
+  else if (size >= 160) { fontJP = 15; fontEN = 12; }
+  else { fontJP = 13; fontEN = 11; }
+
+  document.querySelectorAll(".work-title").forEach(t => {
+    const jp = t.querySelector("span");
+    const en = t.querySelector("dt");
+    if (jp) jp.style.fontSize = fontJP + "px";
+    if (en) en.style.fontSize = fontEN + "px";
+  });
+}
+
+/* レイアウト */
+function layoutItems(sorted) {
+  currentSorted = sorted;
+
+  const W = window.innerWidth;
+
+  /* 列数判定 */
+  let colCount;
+  if (W <= 550) colCount = 2;
+  else if (W <= 900) colCount = 3;
+  else if (W <= 1300) colCount = 4;
+  else colCount = 5;
+
+  /* 比率 */
+  const marginRatio = 0.10;
+  const gapRatio = 0.06;
+
+  const itemSize =
+    W / (colCount + gapRatio * (colCount - 1) + marginRatio * 2);
+
+  const margin = itemSize * marginRatio;
+  const gap = itemSize * gapRatio;
+
+  sorted.forEach(el => {
+    el.style.width = itemSize + "px";
+    el.style.height = itemSize + "px";
+  });
+  applyTitleSize(itemSize);
+
+  const totalWidth = colCount * itemSize + gap * (colCount - 1) + margin * 2;
+  const startX = (W - totalWidth) / 2 + margin;
+
+  let maxBottom = 0;
+
+  sorted.forEach((el, i) => {
+    const col = i % colCount;
+    const row = Math.floor(i / colCount);
+
+    const x = startX + col * (itemSize + gap);
+    const y = 120 + row * (itemSize + gap); /* ← 白帯の高さ 120 に変更 */
+
+    el.style.left = x + "px";
+    el.style.top = y + "px";
+
+    maxBottom = Math.max(maxBottom, y + itemSize);
+  });
+
+  wrapper.style.height = maxBottom + 80 + "px";
+}
+
+/* 初期ランダム */
+function init() {
+  const shuffled = [...items].sort(() => Math.random() - 0.5);
+
+  shuffled.forEach(el => {
+    el.style.left = Math.random() * 200 + "px";
+    el.style.top  = Math.random() * 150 + "px";
+  });
+
+  setTimeout(() => layoutItems(shuffled), 200);
+}
+
+init();
+
+/* Sort */
+const menuButton = document.querySelector(".sort-menu-button");
+const menuBox = document.querySelector(".sort-menu");
+
+menuButton.onclick = () => {
+  menuBox.style.display =
+    menuBox.style.display === "flex" ? "none" : "flex";
+};
+
+document.querySelectorAll(".sort-menu div").forEach(btn => {
+  btn.onclick = () => {
+    menuBox.style.display = "none";
+    const type = btn.dataset.sort;
+    let sorted = [...items];
+
+    if (type === "asc") sorted.sort((a, b) => Number(a.dataset.year) - Number(b.dataset.year));
+    if (type === "desc") sorted.sort((a, b) => Number(b.dataset.year) - Number(a.dataset.year));
+    if (type === "random") sorted.sort(() => Math.random() - 0.5);
+
+    layoutItems(sorted);
+  };
+});
+
+/* リサイズ */
+let lastWidth = window.innerWidth;
+window.addEventListener("resize", () => {
+  if (window.innerWidth !== lastWidth) {
+    lastWidth = window.innerWidth;
+    layoutItems(currentSorted);
+  }
+});
+
+const isTouch = ('ontouchstart' in window);
+
+if (isTouch) {
+
+  let activeItem = null;
+  let hideTimer = null;
+
+  let startX = 0;
+  let startY = 0;
+  let moved = false;
+
+  items.forEach(item => {
+
+    item.addEventListener("touchstart", function(e){
+
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+      moved = false;
+
+    }, {passive:true});
 
 
+    item.addEventListener("touchmove", function(e){
 
-// 商品データ
+      const moveX = Math.abs(
+        e.touches[0].clientX - startX
+      );
 
+      const moveY = Math.abs(
+        e.touches[0].clientY - startY
+      );
 
-const products=[
+      if(moveX > 10 || moveY > 10){
+        moved = true;
+      }
 
-
-{
-
-name:"巨大な一円玉",
-
-artist:"渡邉楽",
-
-price:"¥100,000",
-
-img:"img2.jpg",
-
-text:"巨大化した一円玉をテーマにした作品です。"
-
-},
+    }, {passive:true});
 
 
-{
+   item.addEventListener("touchend", function(e){
 
-name:"Mr.",
+  // スクロールなら普通にスクロール
+  if(moved){
+    return;
+  }
 
-artist:"渡邉楽",
+  // タップ時だけリンクを止める
+  e.preventDefault();
 
-price:"¥50,000",
 
-img:"img19.jpg1",
+  // タップ処理
 
-text:"人物をモチーフにした作品です。"
+      // タップ処理
+      if(activeItem === this){
+
+        window.location.href =
+          this.getAttribute("href");
+
+        return;
+      }
+
+
+      if(hideTimer){
+        clearTimeout(hideTimer);
+      }
+
+
+      items.forEach(i=>{
+        i.classList.remove("is-active");
+      });
+
+
+      this.classList.add("is-active");
+
+      activeItem = this;
+
+
+      hideTimer = setTimeout(()=>{
+
+        this.classList.remove("is-active");
+        activeItem = null;
+
+      },2000);
+     
+     item.addEventListener("click", function(e){
+
+  // タップでJS管理するので通常リンク停止
+  e.preventDefault();
+
+});
+
+
+    });
+
+  });
 
 }
 
 
-];
-
-
-
-
-
-
-
-function showProduct(id){
-
-
-let p=products[id];
-
-
-
-document.getElementById("home")
-.style.display="none";
-
-
-
-document.getElementById("detail")
-.style.display="flex";
-
-
-
-document.getElementById("detailImage")
-.src=p.img;
-
-
-document.getElementById("name")
-.innerHTML=p.name;
-
-
-document.getElementById("artist")
-.innerHTML=p.artist;
-
-
-document.getElementById("price")
-.innerHTML=p.price;
-
-
-document.getElementById("description")
-.innerHTML=p.text;
-
-
-}
-
+/* ─────────────────────────────── */
 
 
 
 </script>
 
-
-
 </body>
-
 </html>
