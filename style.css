@@ -195,15 +195,23 @@ margin:5px;
 
 
 
+.login-area{
+
+position:relative;
+
+}
+
+
+
 #login{
 
 display:none;
 
-position:fixed;
+position:absolute;
 
-top:100px;
+top:40px;
 
-right:50px;
+right:0;
 
 background:white;
 
@@ -211,8 +219,21 @@ border:1px solid #ddd;
 
 padding:30px;
 
+width:250px;
+
+z-index:200;
+
 }
 
+
+
+/* カーソルを乗せた時 */
+
+.login-area:hover #login{
+
+display:block;
+
+}
 
 
 input{
