@@ -89,7 +89,7 @@ font-size:22px;
 
 position:fixed;
 
-left:-300px;
+left:-350px;
 
 top:0;
 
@@ -105,8 +105,16 @@ padding:40px;
 
 transition:.3s;
 
+z-index:100;
+
 }
 
+
+#sidebar.open{
+
+left:0;
+
+}
 
 
 #sidebar.open{
