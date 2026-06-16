@@ -107,19 +107,6 @@ p.text;
 
 
 
-
-loginBtn.onclick=function(){
-
-
-document.getElementById("login")
-.style.display="block";
-
-
-}
-
-
-
-
 cartBtn.onclick=function(){
 
 alert(
