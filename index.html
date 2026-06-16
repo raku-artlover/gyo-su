@@ -8,101 +8,436 @@
 
 <title>ART MARKET</title>
 
-<link rel="stylesheet" href="style.css">
+
+<style>
+
+
+body{
+
+margin:0;
+
+font-family:Arial,sans-serif;
+
+}
+
+
+/* ヘッダー */
+
+header{
+
+height:80px;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+border-bottom:1px solid #ddd;
+
+position:relative;
+
+}
+
+
+
+.logo{
+
+font-size:25px;
+
+font-weight:bold;
+
+text-decoration:none;
+
+color:black;
+
+}
+
+
+
+#menuBtn{
+
+position:absolute;
+
+left:20px;
+
+font-size:28px;
+
+background:none;
+
+border:0;
+
+cursor:pointer;
+
+}
+
+
+
+.header-right{
+
+position:absolute;
+
+right:20px;
+
+display:flex;
+
+gap:15px;
+
+}
+
+
+
+.header-right button{
+
+font-size:22px;
+
+background:none;
+
+border:0;
+
+cursor:pointer;
+
+}
+
+
+
+
+/* サイドバー */
+
+#sidebar{
+
+position:fixed;
+
+top:0;
+
+left:-300px;
+
+width:230px;
+
+height:100%;
+
+background:white;
+
+box-shadow:0 0 15px #aaa;
+
+padding:40px;
+
+transition:.3s;
+
+z-index:10;
+
+}
+
+
+#sidebar.open{
+
+left:0;
+
+}
+
+
+
+#sidebar a{
+
+display:block;
+
+margin:30px 0;
+
+text-decoration:none;
+
+color:black;
+
+}
+
+
+
+
+
+/* ログイン */
+
+.login-area{
+
+position:relative;
+
+}
+
+
+
+#login{
+
+
+display:none;
+
+position:absolute;
+
+right:0;
+
+top:40px;
+
+background:white;
+
+border:1px solid #ddd;
+
+padding:30px;
+
+width:220px;
+
+z-index:20;
+
+}
+
+
+
+.login-area:hover #login{
+
+display:block;
+
+}
+
+
+
+
+
+/* 商品 */
+
+.products{
+
+
+display:grid;
+
+grid-template-columns:
+
+repeat(4,1fr);
+
+gap:30px;
+
+padding:40px;
+
+
+}
+
+
+
+.item{
+
+cursor:pointer;
+
+}
+
+
+
+.item img{
+
+width:100%;
+
+}
+
+
+
+.item p{
+
+margin:5px;
+
+}
+
+
+
+small{
+
+color:#555;
+
+}
+
+
+
+
+/* 商品詳細 */
+
+#detail{
+
+display:none;
+
+padding:40px;
+
+}
+
+
+
+#detail img{
+
+width:400px;
+
+}
+
+
+
+button{
+
+padding:10px 20px;
+
+margin:5px;
+
+}
+
+
+
+
+</style>
 
 </head>
 
 
+
 <body>
+
+
 
 
 <header>
 
 
 <button id="menuBtn">
+
 ☰
+
 </button>
 
 
+
+
 <a href="index.html" class="logo">
+
 ART MARKET
+
 </a>
+
+
 
 
 <div class="header-right">
 
+
 <div class="login-area">
 
-<button id="loginBtn">
+
+<button>
+
 ♙
+
 </button>
 
 
 <div id="login">
 
-<h2>
+
+<h3>
 ログイン
-</h2>
+</h3>
 
 
 <input placeholder="メール">
 
+
+<br>
+
+
 <input placeholder="パスワード">
 
 
+<br>
+
+
 <button>
+
 ログイン
+
 </button>
+
 
 
 <hr>
 
 
+
 <h3>
-新規会員登録
+
+新規登録
+
 </h3>
 
 
 <button>
+
 登録
+
 </button>
 
 
+
 </div>
 
 
 </div>
-<button id="cartBtn">
+
+
+
+
+<button>
+
 🛒
+
 </button>
 
+
 </div>
+
 
 
 </header>
 
 
 
-<!-- サイドバー -->
+
+
 
 <nav id="sidebar">
 
-<button id="closeBtn">
+
+<button id="close">
+
 ×
+
 </button>
 
 
-<a>HOME</a>
+<a href="index.html">
+HOME
+</a>
 
-<a>ITEM</a>
 
-<a>ARTIST</a>
+<a>
+ITEM
+</a>
 
-<a>NEWS</a>
 
-<a>FAQ</a>
+<a>
+ARTIST
+</a>
 
-<a>CONTACT</a>
+
+<a>
+NEWS
+</a>
+
+
+<a>
+FAQ
+</a>
+
+
+<a>
+CONTACT
+</a>
 
 
 </nav>
@@ -111,23 +446,26 @@ ART MARKET
 
 
 
-<!-- 商品一覧 -->
 
-<main id="shop">
+
+<main id="home">
 
 
 <div class="products">
 
 
+
 <div class="item"
-onclick="openProduct(0)">
+onclick="showProduct(0)">
 
 
 <img src="https://picsum.photos/400">
 
+
 <p>
 透明な器
 </p>
+
 
 <small>
 山田太郎
@@ -143,8 +481,10 @@ onclick="openProduct(0)">
 
 
 
+
+
 <div class="item"
-onclick="openProduct(1)">
+onclick="showProduct(1)">
 
 
 <img src="https://picsum.photos/401">
@@ -153,6 +493,7 @@ onclick="openProduct(1)">
 <p>
 夜の花
 </p>
+
 
 <small>
 佐藤花子
@@ -177,24 +518,24 @@ onclick="openProduct(1)">
 
 
 
-<!-- 商品詳細 -->
 
 <section id="detail">
 
 
-<img id="detailImg">
+<img id="detailImage">
 
 
-<h1 id="detailName"></h1>
+
+<h1 id="name"></h1>
 
 
-<p id="detailArtist"></p>
+<h3 id="artist"></h3>
 
 
-<p id="detailText"></p>
+<p id="description"></p>
 
 
-<h2 id="detailPrice"></h2>
+<h2 id="price"></h2>
 
 
 
@@ -214,21 +555,11 @@ onclick="openProduct(1)">
 
 
 
-
 <h2>
+
 その他のアイテム
+
 </h2>
-
-
-<div class="other">
-
-
-<img src="https://picsum.photos/200">
-
-<img src="https://picsum.photos/201">
-
-
-</div>
 
 
 
@@ -240,47 +571,136 @@ onclick="openProduct(1)">
 
 
 
-<!-- ログイン -->
 
-<div id="login">
-
-
-<h2>
-ログイン
-</h2>
+<script>
 
 
-<input placeholder="メール">
+// サイドバー
 
 
-<input placeholder="パスワード">
+const menu =
+document.getElementById("menuBtn");
 
 
-<button>
-ログイン
-</button>
+const sidebar =
+document.getElementById("sidebar");
 
 
-<hr>
+
+menu.onclick=function(){
 
 
-<h3>
-新規会員登録
-</h3>
+sidebar.classList.add("open");
 
 
-<button>
-登録
-</button>
-
-
-</div>
+}
 
 
 
 
+document.getElementById("close")
+.onclick=function(){
 
-<script src="script.js"></script>
+
+sidebar.classList.remove("open");
+
+
+}
+
+
+
+
+
+
+
+// 商品データ
+
+
+const products=[
+
+
+{
+
+name:"透明な器",
+
+artist:"山田太郎",
+
+price:"¥30,000",
+
+img:"https://picsum.photos/600",
+
+text:"金属と光をテーマにした作品"
+
+},
+
+
+{
+
+name:"夜の花",
+
+artist:"佐藤花子",
+
+price:"¥50,000",
+
+img:"https://picsum.photos/601",
+
+text:"夜を表現した作品"
+
+}
+
+
+];
+
+
+
+
+
+
+
+function showProduct(id){
+
+
+let p=products[id];
+
+
+
+document.getElementById("home")
+.style.display="none";
+
+
+
+document.getElementById("detail")
+.style.display="block";
+
+
+
+document.getElementById("detailImage")
+.src=p.img;
+
+
+document.getElementById("name")
+.innerHTML=p.name;
+
+
+document.getElementById("artist")
+.innerHTML=p.artist;
+
+
+document.getElementById("price")
+.innerHTML=p.price;
+
+
+document.getElementById("description")
+.innerHTML=p.text;
+
+
+}
+
+
+
+
+</script>
+
 
 
 </body>
