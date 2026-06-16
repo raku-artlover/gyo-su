@@ -1,383 +1,171 @@
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>巨大な一円玉</title>
-
+<title>いきものとして</title>
 
 <style>
 
-
 body{
-
 margin:0;
-
 font-family:"Helvetica",sans-serif;
-
 background:white;
-
 color:#000;
-
 }
-
-
-
-/* 上部 */
 
 header{
-
 height:65px;
-
 border-bottom:1px solid #ddd;
-
 display:flex;
-
 align-items:center;
-
 justify-content:center;
-
 }
-
-
 
 .logo{
-
 font-size:30px;
-
 font-weight:bold;
-
 text-decoration:none;
-
 color:#000;
-
 }
-
-
-
-
-
-/* 商品ページ */
 
 .container{
-
 display:flex;
-
 gap:70px;
-
 padding:70px;
-
 align-items:flex-start;
-
 }
-
-
-
-/* 左画像 */
 
 .gallery{
-
 width:55%;
-
 }
-
-
 
 .main-image{
-
 width:100%;
-
 aspect-ratio:1 / 1;
-
 object-fit:cover;
-
 }
-
-
-
-/* サムネイル */
 
 .thumbnail-area{
-
 display:flex;
-
 gap:15px;
-
 margin-top:20px;
-
 }
-
-
 
 .thumbnail{
-
 width:80px;
-
 height:80px;
-
 object-fit:cover;
-
 cursor:pointer;
-
 }
-
-
-
-
-
-
-/* 右側 */
 
 .info{
-
 flex:1;
-
 padding-top:30px;
-
 }
-
-
 
 .title{
-
 font-size:40px;
-
 font-weight:bold;
-
 margin-bottom:30px;
-
 }
-
-
 
 .price{
-
 font-size:25px;
-
 margin-bottom:20px;
-
 }
-
-
 
 .artist{
-
 font-size:14px;
-
 margin-bottom:50px;
-
 }
-
-
 
 .description{
-
 line-height:2;
-
 max-width:400px;
-
 }
-
-
-
-
 
 button{
-
 padding:15px 30px;
-
 margin-top:40px;
-
 background:white;
-
 border:1px solid black;
-
 cursor:pointer;
-
 }
 
-
-
 </style>
-
 </head>
-
-
-
 
 <body>
 
-
-
 <header>
-
-
-<a href="../index.html" class="logo">
-
-ぎょーすー
-
-</a>
-
-
+<a href="index.html" class="logo">ぎょーすー</a>
 </header>
-
-
-
-
-
 
 <div class="container">
 
-
-
-<!-- 左 -->
-
-
 <div class="gallery">
 
-
-<img 
-id="mainImage"
-class="main-image"
-src="../img2.jpg">
-
-
+<img id="mainImage" class="main-image" src="img2.jpg">
 
 <div class="thumbnail-area">
 
+<img class="thumbnail" src="../img2.jpg" onclick="changeImage('../img2.jpg')">
 
-<img
-class="thumbnail"
-src="../img2.jpg"
-onclick="changeImage('../img2.jpg')">
+<img class="thumbnail" src="../img2_2.jpg" onclick="changeImage('../img2_2.jpg')">
 
-
-<img
-class="thumbnail"
-src="../img2_2.jpg"
-onclick="changeImage('../img2_2.jpg')">
-
-
-<img
-class="thumbnail"
-src="../img2_3.jpg"
-onclick="changeImage('../img2_3.jpg')">
-
+<img class="thumbnail" src="../img2_3.jpg" onclick="changeImage('../img2_3.jpg')">
 
 </div>
 
-
-
 </div>
-
-
-
-
-
-
-
-<!-- 右 -->
 
 
 <div class="info">
 
-
 <div class="title">
-
-《街をやわらかくする》
-
+《いきものとして》
 </div>
-
-
 
 <div class="price">
-
-¥100,000
-
+¥300,000
 </div>
-
-
 
 <div class="artist">
-
 渡邉 楽
-
 </div>
-
-
 
 <div class="description">
-
-
 巨大な一円玉を通して、
-普段当たり前に見ている価値や認識を
-問い直す作品。
-
-
+普段当たり前に見ている価値や認識を問い直す作品。
 <br><br>
-
-
-素材：金属
-
+素材：木
 <br>
-
 制作年：2024
-
-
 </div>
 
-
-
-
 <button>
-
 🛒 カートに入れる
-
 </button>
-
 
 <br>
 
-
 <button>
-
 ♡ お気に入り
-
 </button>
 
-
-
 </div>
 
-
-
 </div>
-
-
-
-
 
 
 <script>
 
-
 function changeImage(src){
-
-
 document.getElementById("mainImage").src = src;
-
-
 }
-
 
 </script>
 
-
-
 </body>
-
-
 </html>
