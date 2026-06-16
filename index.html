@@ -102,6 +102,7 @@ cursor:pointer;
 
 
 
+
 /* サイドバー */
 
 #sidebar{
@@ -129,11 +130,16 @@ z-index:10;
 }
 
 
-#sidebar.open{
+
+/* ☰またはサイドバーにカーソル */
+
+#menuBtn:hover + #sidebar,
+#sidebar:hover{
 
 left:0;
 
 }
+
 
 
 
@@ -251,6 +257,7 @@ color:#555;
 
 
 
+
 /* 商品詳細 */
 
 #detail{
@@ -258,6 +265,12 @@ color:#555;
 display:none;
 
 padding:40px;
+
+display:flex;
+
+gap:50px;
+
+align-items:flex-start;
 
 }
 
@@ -268,6 +281,15 @@ padding:40px;
 width:400px;
 
 }
+
+
+
+.detail-text{
+
+max-width:400px;
+
+}
+
 
 
 
@@ -403,7 +425,7 @@ ART MARKET
 <nav id="sidebar">
 
 
-<button id="close">
+<button>
 
 ×
 
@@ -526,6 +548,9 @@ Mr.
 
 
 
+<div class="detail-text">
+
+
 <h1 id="name"></h1>
 
 
@@ -562,6 +587,8 @@ Mr.
 </h2>
 
 
+</div>
+
 
 </section>
 
@@ -575,43 +602,6 @@ Mr.
 <script>
 
 
-// サイドバー
-
-
-const menu =
-document.getElementById("menuBtn");
-
-
-const sidebar =
-document.getElementById("sidebar");
-
-
-
-menu.onclick=function(){
-
-
-sidebar.classList.add("open");
-
-
-}
-
-
-
-
-document.getElementById("close")
-.onclick=function(){
-
-
-sidebar.classList.remove("open");
-
-
-}
-
-
-
-
-
-
 
 // 商品データ
 
@@ -621,30 +611,30 @@ const products=[
 
 {
 
-name:"透明な器",
+name:"巨大な一円玉",
 
-artist:"山田太郎",
+artist:"渡邉楽",
 
-price:"¥30,000",
+price:"¥100,000",
 
-img:"https://picsum.photos/600",
+img:"img2.jpg",
 
-text:"金属と光をテーマにした作品"
+text:"巨大化した一円玉をテーマにした作品です。"
 
 },
 
 
 {
 
-name:"夜の花",
+name:"Mr.",
 
-artist:"佐藤花子",
+artist:"渡邉楽",
 
 price:"¥50,000",
 
-img:"https://picsum.photos/601",
+img:"img19.jpg1",
 
-text:"夜を表現した作品"
+text:"人物をモチーフにした作品です。"
 
 }
 
@@ -670,7 +660,7 @@ document.getElementById("home")
 
 
 document.getElementById("detail")
-.style.display="block";
+.style.display="flex";
 
 
 
